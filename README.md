@@ -1,1 +1,1 @@
-# Remove Background From Images Project
+# Apply Object Segmentor To Images Project
