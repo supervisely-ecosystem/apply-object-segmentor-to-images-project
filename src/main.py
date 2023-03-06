@@ -60,9 +60,6 @@ dataset_ids = [dataset_id] if dataset_id else []
 update_globals(dataset_ids)
 
 sly.logger.info(f"App root directory: {g.app_root_directory}")
-# create directory for storing preview files
-os.makedirs(g.static_dir, exist_ok=True)
-sly.io.fs.clean_dir(g.static_dir)
 # dictionary for storing object segmentation model data
 model_data = {}
 
@@ -273,8 +270,7 @@ app = sly.Application(
             settings_preview_content,
             card_output_project,
         ]
-    ),
-    static_dir=g.static_dir,
+    )
 )
 
 
@@ -527,10 +523,10 @@ def redraw_preview():
 
 @select_output_format.value_changed
 def on_format_selected(format):
-    if format == "save labeled images to new project" and output_project_name_input.is_hidden():
-        output_project_name_input.show()
+    if format == "save labeled images to new project" and output_project_name_input_f.is_hidden():
+        output_project_name_input_f.show()
     elif format == "add labeled images to selected project":
-        output_project_name_input.hide()
+        output_project_name_input_f.hide()
 
 
 @apply_model_to_project_button.click
@@ -539,62 +535,73 @@ def apply_models_to_project():
     format = select_output_format.get_value()
     if format == "save labeled images to new project":
         output_project_name_input.enable_readonly()
-        output_project = sly.Project(g.output_project_dir, mode=sly.OpenMode.READ)
-        # merge output project meta with model meta
-        merged_meta = output_project.meta.merge(model_data["model_meta"])
-        output_project.set_meta(merged_meta)
-        output_project_meta = output_project.meta
-        # define session id
-        model_session_id = model_data["session_id"]
-        # define inference settings
-        inference_settings = model_data["inference_settings"]
-        # get datasets info
-        datasets_info = {}
-        for dataset_info in api.dataset.get_list(project_id):
-            dataset_dir = os.path.join(g.output_project_dir, dataset_info.name)
-            datasets_info[dataset_info.id] = sly.Dataset(dataset_dir, mode=sly.OpenMode.READ)
-        # apply models to project
-        with apply_progress_bar(
-            message="Applying model to project...", total=len(images_info)
-        ) as pbar:
-            for image_info in images_info:
-                boxes_ann_json = api.annotation.download(image_info.id).annotation
-                image_ann = sly.Annotation.from_json(boxes_ann_json, output_project_meta)
-                boxes_labels = image_ann.labels
-                for box in boxes_labels:
-                    box_name = box.obj_class.name
-                    # filter bounding boxes in annotation according to selected classes
-                    if box_name in model_data["selected_classes"]:
-                        object_roi = box.geometry.to_bbox()
-                        inference_settings["rectangle"] = object_roi.to_json()
-                        ann = api.task.send_request(
-                            model_data["session_id"],
-                            "inference_image_id",
-                            data={"image_id": image_info.id, "settings": inference_settings},
-                            timeout=500,
-                        )
-                        ann = sly.Annotation.from_json(ann["annotation"], output_project_meta)
-                        image_ann = image_ann.add_labels(ann.labels)
-                        # annotate image in its dataset
-                        image_dataset = datasets_info[image_info.dataset_id]
-                        image_dataset.set_ann(image_info.name, image_ann)
-                        pbar.update()
-            # upload labeled project to platform
-            final_project_id, final_project_name = sly.upload_project(
-                dir=g.output_project_dir,
-                api=api,
-                workspace_id=workspace_id,
-                project_name=output_project_name_input.get_value(),
-                log_progress=True,
-            )
-            # prepare project thumbnail
-            final_project_info = api.project.get_info_by_id(final_project_id)
-            output_project_thmb.set(info=final_project_info)
-            output_project_thmb.show()
+    output_project = sly.Project(g.output_project_dir, mode=sly.OpenMode.READ)
+    # merge output project meta with model meta
+    merged_meta = output_project.meta.merge(model_data["model_meta"])
+    output_project.set_meta(merged_meta)
+    output_project_meta = output_project.meta
+    if format == "add labeled images to selected project":
+        api.project.update_meta(project_id, output_project_meta)
+    # define inference settings
+    inference_settings = model_data["inference_settings"]
+    # get datasets info
+    datasets_info = {}
+    for dataset_info in api.dataset.get_list(project_id):
+        dataset_dir = os.path.join(g.output_project_dir, dataset_info.name)
+        datasets_info[dataset_info.id] = sly.Dataset(dataset_dir, mode=sly.OpenMode.READ)
+    # apply models to project
+    with apply_progress_bar(message="Applying model to project...", total=len(images_info)) as pbar:
+        for image_info in images_info:
+            boxes_ann_json = api.annotation.download(image_info.id).annotation
+            image_ann = sly.Annotation.from_json(boxes_ann_json, output_project_meta)
+            boxes_labels = image_ann.labels
+            for box in boxes_labels:
+                box_name = box.obj_class.name
+                # filter bounding boxes in annotation according to selected classes
+                if box_name in model_data["selected_classes"]:
+                    object_roi = box.geometry.to_bbox()
+                    inference_settings["rectangle"] = object_roi.to_json()
+                    ann = api.task.send_request(
+                        model_data["session_id"],
+                        "inference_image_id",
+                        data={"image_id": image_info.id, "settings": inference_settings},
+                        timeout=500,
+                    )
+                    ann = sly.Annotation.from_json(ann["annotation"], output_project_meta)
+                    image_ann = image_ann.add_labels(ann.labels)
+            # annotate image in its dataset
+            image_dataset = datasets_info[image_info.dataset_id]
+            if format == "save labeled images to new project":
+                image_dataset.set_ann(image_info.name, image_ann)
+            elif format == "add labeled images to selected project":
+                image_path = image_dataset.get_item_path(image_info.name)
+                api.image.download_path(image_info.id, image_path)
+                new_image_info = api.image.upload_path(
+                    image_info.dataset_id,
+                    name="gen_" + image_info.name,
+                    path=image_dataset.get_item_path(image_info.name),
+                )
+                api.annotation.upload_ann(new_image_info.id, image_ann)
+            pbar.update()
+    if format == "save labeled images to new project":
+        # upload labeled project to platform
+        final_project_id, final_project_name = sly.upload_project(
+            dir=g.output_project_dir,
+            api=api,
+            workspace_id=workspace_id,
+            project_name=output_project_name_input.get_value(),
+            log_progress=True,
+        )
+        # prepare project thumbnail
+        final_project_info = api.project.get_info_by_id(final_project_id)
+        output_project_thmb.set(info=final_project_info)
     elif format == "add labeled images to selected project":
-        pass
+        output_project_thmb.set(info=project_info)
+    output_project_thmb.show()
     apply_model_to_project_button.loading = False
     apply_model_to_project_button.hide()
     output_project_done.show()
+    # remove unnecessary files since they are no longer needed
+    sly.io.fs.remove_dir(g.app_data_dir)
     sly.logger.info("Project was successfully labeled")
     app.shutdown()
