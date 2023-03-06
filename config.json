@@ -1,0 +1,24 @@
+{
+    "name": "Apply Object Segmentor to Images Project",
+    "type": "app",
+    "version": "2.0.0",
+    "categories": [
+      "neural network",
+      "images",
+      "salient object segmentation",
+      "inference interfaces"
+    ],
+    "description": "Label project images using object segmentor",
+    "docker_image": "supervisely/base-py-sdk:6.69.66",
+    "min_instance_version": "6.7.16",
+    "entrypoint": "python -m uvicorn src.main:app --host 0.0.0.0 --port 8000",
+    "port": 8000,
+    "task_location": "workspace_tasks",
+    "icon": "some url",
+    "icon_cover": true,
+    "context_menu": {
+      "target": ["images_project", "images_dataset"],
+      "context_root": "Neural Networks"
+    },
+    "poster": "some url"
+  }
