@@ -188,7 +188,7 @@ card_model_settings.lock()
 
 ### 4.2 Inference preview
 redraw_image_button = Button(
-    '<i style="margin-right: 5px" class="zmdi zmdi-rotate-left"></i>preview',
+    '<i style="margin-right: 5px" class="zmdi zmdi-image"></i>preview',
     button_type="warning",
     button_size="small",
     plain=True,
