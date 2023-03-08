@@ -23,7 +23,6 @@ from supervisely.app.widgets import (
     ProjectThumbnail,
     Editor,
     Select,
-    Checkbox,
 )
 
 
@@ -189,19 +188,16 @@ card_model_settings.lock()
 
 ### 4.2 Inference preview
 redraw_image_button = Button(
-    '<i style="margin-right: 5px" class="zmdi zmdi-rotate-left"></i>redraw',
+    '<i style="margin-right: 5px" class="zmdi zmdi-rotate-left"></i>preview',
     button_type="warning",
     button_size="small",
     plain=True,
 )
 select_preview = Select(items=[Select.Item(value="Random image")])
-select_preview.disable()
-select_preview_f = Field(select_preview, "Select image for preview")
-is_random_preview = Checkbox(content="Random image", checked=True)
 preview_params = Container(
-    [redraw_image_button, select_preview_f, is_random_preview],
+    [redraw_image_button, select_preview],
     direction="horizontal",
-    fractions=[1, 1, 1],
+    fractions=[1, 1],
 )
 labeled_image = LabeledImage(fill_rectangle=False)
 preview_content = Container(
@@ -452,6 +448,9 @@ def select_classes():
     images_info = []
     for dataset_info in api.dataset.get_list(project_id):
         images_info.extend(api.image.get_list(dataset_info.id))
+    image_items = [Select.Item(value="Random image")]
+    image_items.extend([Select.Item(image_info.id, image_info.name) for image_info in images_info])
+    select_preview.set(items=image_items)
     preview_image_info = get_random_image(images_info)
     # draw detection preview
     draw_inference_preview(preview_image_info, inference_settings)
@@ -492,18 +491,6 @@ def save_model_settings():
     card_output_project.uncollapse()
 
 
-@is_random_preview.value_changed
-def select_preview_image(value):
-    if value == False:
-        select_preview.enable()
-        select_preview.set(
-            items=[Select.Item(image_info.id, image_info.name) for image_info in images_info]
-        )
-    else:
-        select_preview.disable()
-        select_preview.set(items=[Select.Item(value="Random image")])
-
-
 @reselect_model_settings_button.click
 def reselect_model_settings():
     model_settings_editor.readonly = False
@@ -518,7 +505,7 @@ def reselect_model_settings():
 def redraw_preview():
     labeled_image.hide()
     card_preview.loading = True
-    if is_random_preview.is_checked():
+    if select_preview.get_value() == "Random image":
         preview_image_info = get_random_image(images_info)
     else:
         id = select_preview.get_value()
