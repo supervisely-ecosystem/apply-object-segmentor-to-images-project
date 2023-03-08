@@ -621,6 +621,7 @@ def apply_models_to_project():
         final_project_info = api.project.get_info_by_id(final_project_id)
         output_project_thmb.set(info=final_project_info)
     elif format == "add labeled images to selected project":
+        project_info = api.project.get_info_by_id(project_id)
         output_project_thmb.set(info=project_info)
     output_project_thmb.show()
     apply_model_to_project_button.loading = False
