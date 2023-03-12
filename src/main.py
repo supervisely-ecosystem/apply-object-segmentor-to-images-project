@@ -391,13 +391,16 @@ def draw_inference_preview(image_info, settings):
                 data={"image_id": image_info.id, "settings": settings},
                 timeout=500,
             )
+            target_class_name = box_name + "_mask"
             if not preview_project_meta.get_obj_class(
-                box_name + "_mask"
+                target_class_name
             ):  # if obj class is not in preview project meta
-                preview_project_meta = preview_project_meta.add_obj_class(
-                    sly.ObjClass(box_name + "_mask", sly.Bitmap, [255, 0, 0])
-                )
+                target_class = sly.ObjClass(target_class_name, sly.Bitmap, [255, 0, 0])
+                preview_project_meta = preview_project_meta.add_obj_class(target_class)
             ann = sly.Annotation.from_json(ann["annotation"], preview_project_meta)
+            label = ann.labels[0]
+            final_label = [label.clone(obj_class=target_class)]
+            ann = ann.clone(labels=final_label)
             image_ann = image_ann.add_labels(ann.labels)
     # draw predicted bounding boxes on preview image
     labeled_image.set(
@@ -563,21 +566,22 @@ def apply_models_to_project():
                         data={"image_id": image_info.id, "settings": inference_settings},
                         timeout=500,
                     )
+                    target_class_name = box_name + "_mask"
                     if not output_project_meta.get_obj_class(
-                        box_name + "_mask"
+                        target_class_name
                     ):  # if obj class is not in output project meta
-                        output_project_meta = output_project_meta.add_obj_class(
-                            sly.ObjClass(box_name + "_mask", sly.Bitmap, [255, 0, 0])
-                        )
+                        target_class = sly.ObjClass(box_name + "_mask", sly.Bitmap, [255, 0, 0])
+                        output_project_meta = output_project_meta.add_obj_class(target_class)
                     global project_meta
                     if (
-                        not project_meta.get_obj_class(box_name + "_mask")
+                        not project_meta.get_obj_class(target_class_name)
                         and format == "add labeled images to selected project"
                     ):  # if obj class is not in project meta
-                        project_meta = project_meta.add_obj_class(
-                            sly.ObjClass(box_name + "_mask", sly.Bitmap, [255, 0, 0])
-                        )
+                        project_meta = project_meta.add_obj_class(target_class)
                     ann = sly.Annotation.from_json(ann["annotation"], output_project_meta)
+                    label = ann.labels[0]
+                    final_label = [label.clone(obj_class=target_class)]
+                    ann = ann.clone(labels=final_label)
                     image_ann = image_ann.add_labels(ann.labels)
             # annotate image in its dataset
             image_dataset = datasets_info[image_info.dataset_id]
