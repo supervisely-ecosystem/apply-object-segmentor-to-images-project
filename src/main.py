@@ -392,9 +392,8 @@ def draw_inference_preview(image_info, settings):
                 timeout=500,
             )
             target_class_name = box_name + "_mask"
-            if not preview_project_meta.get_obj_class(
-                target_class_name
-            ):  # if obj class is not in preview project meta
+            target_class = preview_project_meta.get_obj_class(target_class_name)
+            if target_class is None:  # if obj class is not in preview project meta
                 target_class = sly.ObjClass(target_class_name, sly.Bitmap, [255, 0, 0])
                 preview_project_meta = preview_project_meta.add_obj_class(target_class)
             ann = sly.Annotation.from_json(ann["annotation"], preview_project_meta)
@@ -567,9 +566,8 @@ def apply_models_to_project():
                         timeout=500,
                     )
                     target_class_name = box_name + "_mask"
-                    if not output_project_meta.get_obj_class(
-                        target_class_name
-                    ):  # if obj class is not in output project meta
+                    target_class = output_project_meta.get_obj_class(target_class_name)
+                    if target_class is None:  # if obj class is not in output project meta
                         target_class = sly.ObjClass(box_name + "_mask", sly.Bitmap, [255, 0, 0])
                         output_project_meta = output_project_meta.add_obj_class(target_class)
                     global project_meta
