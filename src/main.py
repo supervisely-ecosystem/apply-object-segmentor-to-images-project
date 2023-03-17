@@ -397,10 +397,11 @@ def draw_inference_preview(image_info, settings):
                 target_class = sly.ObjClass(target_class_name, sly.Bitmap, [255, 0, 0])
                 preview_project_meta = preview_project_meta.add_obj_class(target_class)
             ann = sly.Annotation.from_json(ann["annotation"], preview_project_meta)
-            label = ann.labels[0]
-            final_label = [label.clone(obj_class=target_class)]
-            ann = ann.clone(labels=final_label)
-            image_ann = image_ann.add_labels(ann.labels)
+            if len(ann.labels) > 0:
+                label = ann.labels[0]
+                final_label = [label.clone(obj_class=target_class)]
+                ann = ann.clone(labels=final_label)
+                image_ann = image_ann.add_labels(ann.labels)
     # draw predicted bounding boxes on preview image
     labeled_image.set(
         title="Labeled image example",
