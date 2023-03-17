@@ -577,10 +577,11 @@ def apply_models_to_project():
                     ):  # if obj class is not in project meta
                         project_meta = project_meta.add_obj_class(target_class)
                     ann = sly.Annotation.from_json(ann["annotation"], output_project_meta)
-                    label = ann.labels[0]
-                    final_label = [label.clone(obj_class=target_class)]
-                    ann = ann.clone(labels=final_label)
-                    image_ann = image_ann.add_labels(ann.labels)
+                    if len(ann.labels) > 0:
+                        label = ann.labels[0]
+                        final_label = [label.clone(obj_class=target_class)]
+                        ann = ann.clone(labels=final_label)
+                        image_ann = image_ann.add_labels(ann.labels)
             # annotate image in its dataset
             image_dataset = datasets_info[image_info.dataset_id]
             if format == "save labeled images to new project":
