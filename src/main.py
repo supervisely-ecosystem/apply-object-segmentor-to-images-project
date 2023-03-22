@@ -450,7 +450,8 @@ def select_classes():
     # define images info
     images_info = []
     for dataset_info in api.dataset.get_list(project_id):
-        images_info.extend(api.image.get_list(dataset_info.id))
+        if dataset_info.id in dataset_ids:
+            images_info.extend(api.image.get_list(dataset_info.id))
     image_items = [Select.Item(value="Random image")]
     image_items.extend([Select.Item(image_info.id, image_info.name) for image_info in images_info])
     select_preview.set(items=image_items)
@@ -546,8 +547,9 @@ def apply_models_to_project():
     # get datasets info
     datasets_info = {}
     for dataset_info in api.dataset.get_list(project_id):
-        dataset_dir = os.path.join(g.output_project_dir, dataset_info.name)
-        datasets_info[dataset_info.id] = sly.Dataset(dataset_dir, mode=sly.OpenMode.READ)
+        if dataset_info.id in dataset_ids:
+            dataset_dir = os.path.join(g.output_project_dir, dataset_info.name)
+            datasets_info[dataset_info.id] = sly.Dataset(dataset_dir, mode=sly.OpenMode.READ)
     # apply models to project
     with apply_progress_bar(message="Applying model to project...", total=len(images_info)) as pbar:
         for image_info in images_info:
