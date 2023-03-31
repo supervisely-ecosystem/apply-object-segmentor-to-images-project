@@ -25,7 +25,7 @@ xxx
 
 ## Preparation
 
-- To start using this application, you need to launch the Serve IS-Net app. Learn more about this app [HERE](https://dev.supervise.ly/ecosystem/apps/serve-isnet).
+- To use this application you need to launch the Serve IS-Net app and serve the model on your device. Learn more about this app [HERE](https://dev.supervise.ly/ecosystem/apps/serve-isnet).
 - Before running this application, make sure that the objects you need to segment are labeled with `BBoxes`.
 
 ## Related apps
