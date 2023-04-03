@@ -1,5 +1,5 @@
 <div align="center" markdown>
-<img src="https://user-images.githubusercontent.com/119248312/229189558-1f87902b-95f3-498a-9edb-2093fbf576bf.jpg"/>
+<img src="https://user-images.githubusercontent.com/119248312/229512592-aa88dd5e-6653-4994-bd21-77ae4cfb0664.jpg"/>
   
 # Apply Object Segmentor To Images Project
   
