@@ -21,7 +21,15 @@
 
 ## Overview
 
-xxx
+This app allows to label images project using salient object segmentation model.
+
+Application key points:
+
+- Select datasets to label
+- Connect to salient object segmentation model
+- Choose project classes that will be used for prediction
+- Select model settings and preview inference result
+- Select output format
 
 ## Preparation
 
