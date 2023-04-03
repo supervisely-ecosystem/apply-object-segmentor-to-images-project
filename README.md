@@ -42,7 +42,7 @@ You can use this model's serving as a Supervisely Application ⬇️
 
 - [Serve IS-Net](https://ecosystem.supervise.ly/apps/serve-isnet) - app allows to segment images in labeling interface using IS-Net model.  
     
-    <img data-key="sly-module-link" data-module-slug="supervisely-ecosystem/serve-isnet" src="https://user-images.githubusercontent.com/115161827/227242070-fff3a734-af6c-447e-9cf1-fac86643291f.jpg" height="70px" margin-bottom="20px"/>
+    <img data-key="sly-module-link" data-module-slug="supervisely-ecosystem/serve-isnet" src="https://user-images.githubusercontent.com/115161827/229478001-0be3c5bc-b152-4e07-a937-1d19f1687add.png" height="70px" margin-bottom="20px"/>
     
 - [Serve SelfReformer](https://ecosystem.supervise.ly/apps/serve-selfreformer) - this is a serving app that allows you to apply the SelfReformer model to an image for  Salient Instance Segmentation tasks. 
     
