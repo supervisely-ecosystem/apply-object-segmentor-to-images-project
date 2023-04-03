@@ -1,5 +1,5 @@
 <div align="center" markdown>
-<img src="https://user-images.githubusercontent.com/119248312/229123689-37bb6d99-0e51-4bda-b458-edc6c7887717.jpg"/>
+<img src="https://user-images.githubusercontent.com/119248312/229189558-1f87902b-95f3-498a-9edb-2093fbf576bf.jpg"/>
   
 # Apply Object Segmentor To Images Project
   
@@ -43,6 +43,14 @@ You can use this model's serving as a Supervisely Application ⬇️
 - [Serve IS-Net](https://ecosystem.supervise.ly/apps/serve-isnet) - app allows to segment images in labeling interface using IS-Net model.  
     
     <img data-key="sly-module-link" data-module-slug="supervisely-ecosystem/serve-isnet" src="https://user-images.githubusercontent.com/115161827/227242070-fff3a734-af6c-447e-9cf1-fac86643291f.jpg" height="70px" margin-bottom="20px"/>
+    
+- [Serve SelfReformer](https://ecosystem.supervise.ly/apps/serve-selfreformer) - this is a serving app that allows you to apply the SelfReformer model to an image for  Salient Instance Segmentation tasks. 
+    
+    <img data-key="sly-module-link" data-module-slug="supervisely-ecosystem/serve-selfreformer" src="XXX" height="70px" margin-bottom="20px"/>
+    
+- [Serve InSPyReNet](https://ecosystem.supervise.ly/apps/serve-InSPyReNet) - app allows you to apply the InSPyReNet model to an image for Salient Instance Segmentation tasks.  
+    
+    <img data-key="sly-module-link" data-module-slug="supervisely-ecosystem/serve-InSPyReNet" src="XXX" height="70px" margin-bottom="20px"/>
    
 ## Screenshot
 
