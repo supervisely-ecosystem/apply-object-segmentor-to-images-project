@@ -46,9 +46,9 @@ You can use this model's serving as a Supervisely Application ⬇️
     
 - [Serve SelfReformer](https://ecosystem.supervise.ly/apps/serve-selfreformer) - this is a serving app that allows you to apply the SelfReformer model to an image for  Salient Instance Segmentation tasks. 
     
-    <img data-key="sly-module-link" data-module-slug="supervisely-ecosystem/serve-selfreformer" src="XXX" height="70px" margin-bottom="20px"/>
+    <img data-key="sly-module-link" data-module-slug="supervisely-ecosystem/serve-selfreformer" src="https://user-images.githubusercontent.com/115161827/229481263-09f0605c-40b1-4193-ba7f-8f3b06a53578.png" height="70px" margin-bottom="20px"/>
     
-- [Serve InSPyReNet](https://ecosystem.supervise.ly/apps/serve-InSPyReNet) - app allows you to apply the InSPyReNet model to an image for Salient Instance Segmentation tasks.  
+- [Serve InSPyReNet](https://ecosystem.supervise.ly/apps/serve-inspyrenet) - app allows you to apply the InSPyReNet model to an image for Salient Instance Segmentation tasks.  
     
     <img data-key="sly-module-link" data-module-slug="supervisely-ecosystem/serve-InSPyReNet" src="XXX" height="70px" margin-bottom="20px"/>
    
