@@ -50,7 +50,7 @@ You can use this model's serving as a Supervisely Application ⬇️
     
 - [Serve InSPyReNet](https://ecosystem.supervise.ly/apps/serve-inspyrenet) - app allows you to apply the InSPyReNet model to an image for Salient Instance Segmentation tasks.  
     
-    <img data-key="sly-module-link" data-module-slug="supervisely-ecosystem/serve-InSPyReNet" src="XXX" height="70px" margin-bottom="20px"/>
+    <img data-key="sly-module-link" data-module-slug="supervisely-ecosystem/serve-InSPyReNet" src="https://user-images.githubusercontent.com/115161827/229483668-dc48e163-5b11-4c0e-b323-e6e0d7c5df43.png" height="70px" margin-bottom="20px"/>
    
 ## Screenshot
 
