@@ -33,8 +33,8 @@ Application key points:
 
 ## Preparation
 
-- To use this application you need to launch the Serve IS-Net app and serve the model on your device. Learn more about this app [HERE](https://dev.supervise.ly/ecosystem/apps/serve-isnet).
-- Before running this application, make sure that the objects you need to segment are labeled with `BBoxes`.
+- To use this application you need to launch the Serve IS-Net, Serve SelfReformer or Serve InSPyRenet app and serve the model on your device. Learn more about these apps here: [Serve IS-Net](https://dev.supervise.ly/ecosystem/apps/serve-isnet), [Serve SelfReformer](https://dev.supervise.ly/ecosystem/apps/serve-selfreformer), [Serve InSPyReNet](https://dev.supervise.ly/ecosystem/apps/serve-inspyrenet).
+- Before running the application, make sure that the objects you need to segment are labeled with Bounding Boxes.
 
 ## Related apps
 
