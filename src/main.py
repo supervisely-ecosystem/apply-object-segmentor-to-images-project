@@ -383,6 +383,7 @@ def draw_inference_preview(image_info, settings):
         box_name = box.obj_class.name
         # filter bounding boxes in annotation according to selected classes
         if box_name in model_data["selected_classes"]:
+            settings["bbox_class_name"] = box_name
             object_roi = box.geometry.to_bbox()
             settings["rectangle"] = object_roi.to_json()
             ann = api.task.send_request(
@@ -560,6 +561,7 @@ def apply_models_to_project():
                 box_name = box.obj_class.name
                 # filter bounding boxes in annotation according to selected classes
                 if box_name in model_data["selected_classes"]:
+                    inference_settings["bbox_class_name"] = box_name
                     object_roi = box.geometry.to_bbox()
                     inference_settings["rectangle"] = object_roi.to_json()
                     ann = api.task.send_request(
