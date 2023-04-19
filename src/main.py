@@ -375,6 +375,8 @@ def get_random_image(images_info):
 
 # function for drawing inference previews
 def draw_inference_preview(image_info, settings):
+    if isinstance(settings, str):
+        settings = yaml.safe_load(settings)
     boxes_ann_json = api.annotation.download(image_info.id).annotation
     global preview_project_meta
     image_ann = sly.Annotation.from_json(boxes_ann_json, preview_project_meta)
@@ -385,6 +387,7 @@ def draw_inference_preview(image_info, settings):
         if box_name in model_data["selected_classes"]:
             settings["mode"] = "bbox"
             settings["bbox_class_name"] = box_name
+            settings["input_image_id"] = image_info.id
             object_roi = box.geometry.to_bbox()
             settings["rectangle"] = object_roi.to_json()
             ann = api.task.send_request(
@@ -432,7 +435,6 @@ def select_classes():
         "get_custom_inference_settings",
         data={},
     )
-    model_data["inference_settings"] = inference_settings
     if inference_settings["settings"] is None or len(inference_settings["settings"]) == 0:
         inference_settings["settings"] = ""
     elif isinstance(inference_settings["settings"], dict):
@@ -459,7 +461,7 @@ def select_classes():
     select_preview.set(items=image_items)
     preview_image_info = get_random_image(images_info)
     # draw detection preview
-    draw_inference_preview(preview_image_info, inference_settings)
+    draw_inference_preview(preview_image_info, inference_settings["settings"])
     card_preview.loading = False
     card_preview.uncollapse()
     card_preview.unlock()
@@ -562,7 +564,9 @@ def apply_models_to_project():
                 box_name = box.obj_class.name
                 # filter bounding boxes in annotation according to selected classes
                 if box_name in model_data["selected_classes"]:
+                    inference_settings["mode"] = "bbox"
                     inference_settings["bbox_class_name"] = box_name
+                    inference_settings["input_image_id"] = image_info.id
                     object_roi = box.geometry.to_bbox()
                     inference_settings["rectangle"] = object_roi.to_json()
                     ann = api.task.send_request(
