@@ -1,24 +1,27 @@
 {
-    "name": "Apply Object Segmentor to Images Project",
-    "type": "app",
-    "version": "2.0.0",
-    "categories": [
-      "neural network",
-      "images",
-      "salient object segmentation",
-      "inference interfaces"
+  "name": "Apply Object Segmentor to Images Project",
+  "type": "app",
+  "version": "2.0.0",
+  "categories": [
+    "neural network",
+    "images",
+    "salient object segmentation",
+    "inference interfaces"
+  ],
+  "description": "Label project images using object segmentor",
+  "docker_image": "supervisely/base-py-sdk:6.73.45",
+  "min_instance_version": "6.8.88",
+  "entrypoint": "python -m uvicorn src.main:app --host 0.0.0.0 --port 8000",
+  "port": 8000,
+  "task_location": "workspace_tasks",
+  "icon": "https://user-images.githubusercontent.com/119248312/229166923-a31d3496-ead6-4eaf-a36e-4e3254b52cc0.jpg",
+  "icon_cover": true,
+  "context_menu": {
+    "target": [
+      "images_project",
+      "images_dataset"
     ],
-    "description": "Label project images using object segmentor",
-    "docker_image": "supervisely/base-py-sdk:6.72.220",
-    "min_instance_version": "6.7.16",
-    "entrypoint": "python -m uvicorn src.main:app --host 0.0.0.0 --port 8000",
-    "port": 8000,
-    "task_location": "workspace_tasks",
-    "icon": "https://user-images.githubusercontent.com/119248312/229166923-a31d3496-ead6-4eaf-a36e-4e3254b52cc0.jpg",
-    "icon_cover": true,
-    "context_menu": {
-      "target": ["images_project", "images_dataset"],
-      "context_root": "Neural Networks"
-    },
-    "poster": "https://user-images.githubusercontent.com/119248312/229512592-aa88dd5e-6653-4994-bd21-77ae4cfb0664.jpg"
-  }
+    "context_root": "Neural Networks"
+  },
+  "poster": "https://user-images.githubusercontent.com/119248312/229512592-aa88dd5e-6653-4994-bd21-77ae4cfb0664.jpg"
+}
