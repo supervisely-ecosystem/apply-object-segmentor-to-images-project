@@ -380,6 +380,7 @@ def draw_inference_preview(image_info, settings):
     boxes_ann_json = api.annotation.download(image_info.id).annotation
     global preview_project_meta
     image_ann = sly.Annotation.from_json(boxes_ann_json, preview_project_meta)
+    image_ann = image_ann.sly.filter_labels_by_classes(model_data["selected_classes"])
     boxes_labels = image_ann.labels
     for box in boxes_labels:
         box_name = box.obj_class.name
